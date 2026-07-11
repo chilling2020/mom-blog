@@ -77,7 +77,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="pointer-events-none absolute -top-10 -right-10 z-20 w-40 sm:w-56 md:w-72 lg:w-80"
+        className="pointer-events-none absolute top-16 -right-10 z-20 w-40 sm:top-20 sm:w-56 md:w-72 lg:w-80"
         style={
           prefersReducedMotion
             ? undefined
