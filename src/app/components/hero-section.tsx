@@ -33,9 +33,6 @@ export default function HeroSection() {
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
   const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  // Reduced-motion fallback: static values, no scroll-linked transforms.
-  const staticTransform = { x: "0%", y: "0%", opacity: 1, scale: 1 };
-
   return (
     <section
       ref={heroRef}
@@ -59,52 +56,47 @@ export default function HeroSection() {
       <div className="animate-fade-in absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent" />
 
       {/* Decorative foreground flowers — purely visual, never intercept clicks */}
-      <motion.img
-        src="/flowers-left.png"
-        alt=""
-        aria-hidden="true"
+      <motion.div
         className="pointer-events-none absolute -bottom-10 -left-10 z-20 w-48 sm:w-64 md:w-80 lg:w-96"
         style={
           prefersReducedMotion
-            ? staticTransform
-            : {
-                x: leftX,
-                y: leftY,
-                opacity: flowerOpacity,
-                scale: flowerScale,
-              }
+            ? undefined
+            : { x: leftX, y: leftY, opacity: flowerOpacity, scale: flowerScale }
         }
-      />
+      >
+        <motion.img
+          src="/flowers-left.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full"
+          style={{ filter: "brightness(0) invert(1)" }}
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.8, delay: 0.3, ease: "easeOut" }}
+        />
+      </motion.div>
+
       <motion.div
         className="pointer-events-none absolute -top-10 -right-10 z-20 w-40 sm:w-56 md:w-72 lg:w-80"
         style={
           prefersReducedMotion
-            ? staticTransform
-            : {
-                x: rightX,
-                y: rightY,
-                opacity: flowerOpacity,
-                scale: flowerScale,
-              }
+            ? undefined
+            : { x: rightX, y: rightY, opacity: flowerOpacity, scale: flowerScale }
         }
       >
-        <div className="relative">
-          <img
-            src="/flowers-right.png"
-            alt=""
-            aria-hidden="true"
-            className="w-full"
-            style={{ transform: "scaleY(-1)" }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundColor: "white",
-              opacity: 0.4,
-              mixBlendMode: "screen",
-            }}
-          />
-        </div>
+        <motion.img
+          src="/flowers-right.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full"
+          style={{
+            rotateX: 180,
+            filter: "brightness(0) invert(1)",
+          }}
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
+        />
       </motion.div>
 
       <motion.div
