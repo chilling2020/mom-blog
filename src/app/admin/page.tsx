@@ -6,7 +6,7 @@ export default async function AdminPage() {
   const posts = await prisma.post.findMany({ orderBy: { date: "desc" } });
 
   return (
-    <main className="min-h-screen bg-[#f8f5ef] px-6 py-10">
+    <main className="min-h-screen bg-[#f8f5ef] px-6 pb-10 pt-32 sm:pt-40">
       <div className="mx-auto max-w-4xl">
         <div className="flex items-center justify-between">
           <h1 className="font-display text-3xl font-medium">Посты блога</h1>
