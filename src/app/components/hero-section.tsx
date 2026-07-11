@@ -75,10 +75,7 @@ export default function HeroSection() {
               }
         }
       />
-      <motion.img
-        src="/flowers-right.png"
-        alt=""
-        aria-hidden="true"
+      <motion.div
         className="pointer-events-none absolute -top-10 -right-10 z-20 w-40 sm:w-56 md:w-72 lg:w-80"
         style={
           prefersReducedMotion
@@ -90,7 +87,25 @@ export default function HeroSection() {
                 scale: flowerScale,
               }
         }
-      />
+      >
+        <div className="relative">
+          <img
+            src="/flowers-right.png"
+            alt=""
+            aria-hidden="true"
+            className="w-full"
+            style={{ transform: "scaleY(-1)" }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundColor: "white",
+              opacity: 0.4,
+              mixBlendMode: "screen",
+            }}
+          />
+        </div>
+      </motion.div>
 
       <motion.div
         className="relative z-10 mx-auto flex min-h-screen max-w-6xl items-center px-6 pt-24"
