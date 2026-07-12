@@ -7,10 +7,12 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
+import { dictionary, type Locale } from "@/lib/i18n";
 
-export default function HeroSection() {
+export default function HeroSection({ locale }: { locale: Locale }) {
   const heroRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const dict = dictionary[locale].hero;
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -112,24 +114,23 @@ export default function HeroSection() {
             className="animate-fade-in-up mb-5 text-sm uppercase tracking-[0.35em] text-neutral-300"
             style={{ animationDelay: "150ms" }}
           >
-            Life in America Blog
+            {dict.eyebrow}
           </p>
 
           <h1
             className="font-display animate-fade-in-up text-5xl font-medium leading-tight tracking-tight sm:text-6xl md:text-8xl"
             style={{ animationDelay: "300ms" }}
           >
-            Жизнь состоит
+            {dict.title[0]}
             <br />
-            из моментов ♡
+            {dict.title[1]}
           </h1>
 
           <p
             className="animate-fade-in-up mt-8 max-w-2xl text-lg leading-8 text-neutral-200 md:text-xl"
             style={{ animationDelay: "500ms" }}
           >
-            Этот блог — о жизни, переезде, покупках, семье, документах и
-            маленьких победах каждый день.
+            {dict.subtitle}
           </p>
 
           <div
@@ -140,14 +141,14 @@ export default function HeroSection() {
               href="/blog"
               className="rounded-full bg-[#f5d7a5] px-8 py-4 font-medium text-black transition hover:scale-105"
             >
-              Читать статьи →
+              {dict.readArticles}
             </a>
 
             <a
               href="/about"
               className="rounded-full border border-white/70 px-8 py-4 text-white transition hover:bg-white hover:text-black"
             >
-              Обо мне
+              {dict.aboutMe}
             </a>
           </div>
         </div>

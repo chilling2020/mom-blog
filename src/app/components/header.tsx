@@ -1,20 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { dictionary, LOCALE_COOKIE, type Locale } from "@/lib/i18n";
 
-const links = [
-  { href: "/", label: "Главная" },
-  { href: "/blog", label: "Блог" },
-  { href: "/about", label: "О нас" },
-];
-
-export default function Header() {
+export default function Header({ locale }: { locale: Locale }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const dict = dictionary[locale];
+  const links = [
+    { href: "/", label: dict.nav.home },
+    { href: "/blog", label: dict.nav.blog },
+    { href: "/about", label: dict.nav.about },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -27,8 +30,11 @@ export default function Header() {
     setMenuOpen(false);
   }, [pathname]);
 
-  // "floating" = transparent glass over the dark hero video on the homepage.
-  // Everywhere else (or once scrolled) the header becomes a solid, tinted glass bar.
+  function switchLocale(next: Locale) {
+    document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    router.refresh();
+  }
+
   const floating = isHome && !scrolled;
 
   return (
@@ -46,28 +52,63 @@ export default function Header() {
             floating ? "text-white" : "text-neutral-950"
           }`}
         >
-          Мама в Америке
+          {dict.siteName}
         </Link>
 
-        <nav
-          className={`hidden gap-8 text-sm sm:flex transition-colors duration-500 ${
-            floating ? "text-white/90" : "text-neutral-700"
-          }`}
-        >
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition-opacity hover:opacity-60"
+        <div className="flex items-center gap-6">
+          <nav
+            className={`hidden gap-8 text-sm sm:flex transition-colors duration-500 ${
+              floating ? "text-white/90" : "text-neutral-700"
+            }`}
+          >
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="transition-opacity hover:opacity-60"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div
+            className={`hidden items-center gap-1 rounded-full border px-1 py-1 text-xs font-medium sm:flex ${
+              floating
+                ? "border-white/30 text-white/90"
+                : "border-neutral-300 text-neutral-700"
+            }`}
+          >
+            <button
+              onClick={() => switchLocale("ru")}
+              className={`rounded-full px-2.5 py-1 transition ${
+                locale === "ru"
+                  ? floating
+                    ? "bg-white text-black"
+                    : "bg-neutral-950 text-white"
+                  : "hover:opacity-70"
+              }`}
             >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+              RU
+            </button>
+            <button
+              onClick={() => switchLocale("en")}
+              className={`rounded-full px-2.5 py-1 transition ${
+                locale === "en"
+                  ? floating
+                    ? "bg-white text-black"
+                    : "bg-neutral-950 text-white"
+                  : "hover:opacity-70"
+              }`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
 
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] sm:hidden"
         >
@@ -87,11 +128,11 @@ export default function Header() {
       {/* Mobile dropdown */}
       <div
         className={`overflow-hidden transition-[max-height,opacity] duration-300 sm:hidden ${
-          menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
+          menuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         } ${floating ? "bg-black/20 backdrop-blur-md" : "bg-[#f8f5ef]/95 backdrop-blur-xl"}`}
       >
         <nav
-          className={`flex flex-col gap-1 px-6 pb-5 pt-1 ${
+          className={`flex flex-col gap-1 px-6 pb-3 pt-1 ${
             floating ? "text-white" : "text-neutral-800"
           }`}
         >
@@ -105,6 +146,28 @@ export default function Header() {
             </Link>
           ))}
         </nav>
+        <div
+          className={`flex gap-2 px-6 pb-5 text-sm font-medium ${
+            floating ? "text-white/90" : "text-neutral-700"
+          }`}
+        >
+          <button
+            onClick={() => switchLocale("ru")}
+            className={`rounded-full border px-3 py-1.5 ${
+              locale === "ru" ? "bg-neutral-950 text-white border-neutral-950" : "border-current"
+            }`}
+          >
+            RU
+          </button>
+          <button
+            onClick={() => switchLocale("en")}
+            className={`rounded-full border px-3 py-1.5 ${
+              locale === "en" ? "bg-neutral-950 text-white border-neutral-950" : "border-current"
+            }`}
+          >
+            EN
+          </button>
+        </div>
       </div>
     </header>
   );

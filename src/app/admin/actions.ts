@@ -62,9 +62,13 @@ function makeSlug(title: string) {
 
 export async function createPost(formData: FormData): Promise<ActionState | void> {
   const title = formData.get("title")?.toString().trim() ?? "";
+  const titleEn = formData.get("titleEn")?.toString().trim() ?? "";
   const category = formData.get("category")?.toString().trim() ?? "";
+  const categoryEn = formData.get("categoryEn")?.toString().trim() ?? "";
   const excerpt = formData.get("excerpt")?.toString().trim() ?? "";
+  const excerptEn = formData.get("excerptEn")?.toString().trim() ?? "";
   const content = formData.get("content")?.toString().trim() ?? "";
+  const contentEn = formData.get("contentEn")?.toString().trim() ?? "";
   const images = formData.getAll("imageUrls").map(String).filter(Boolean);
 
   if (!title || !content) {
@@ -81,9 +85,13 @@ export async function createPost(formData: FormData): Promise<ActionState | void
     data: {
       slug,
       title,
+      titleEn,
       category: category || "Без категории",
+      categoryEn,
       excerpt: excerpt || content.slice(0, 140),
+      excerptEn: excerptEn || contentEn.slice(0, 140),
       content,
+      contentEn,
       images,
     },
   });
@@ -99,9 +107,13 @@ export async function updatePost(
   formData: FormData
 ): Promise<ActionState | void> {
   const title = formData.get("title")?.toString().trim() ?? "";
+  const titleEn = formData.get("titleEn")?.toString().trim() ?? "";
   const category = formData.get("category")?.toString().trim() ?? "";
+  const categoryEn = formData.get("categoryEn")?.toString().trim() ?? "";
   const excerpt = formData.get("excerpt")?.toString().trim() ?? "";
+  const excerptEn = formData.get("excerptEn")?.toString().trim() ?? "";
   const content = formData.get("content")?.toString().trim() ?? "";
+  const contentEn = formData.get("contentEn")?.toString().trim() ?? "";
   const images = formData.getAll("imageUrls").map(String).filter(Boolean);
 
   if (!title || !content) {
@@ -112,9 +124,13 @@ export async function updatePost(
     where: { id },
     data: {
       title,
+      titleEn,
       category: category || "Без категории",
+      categoryEn,
       excerpt: excerpt || content.slice(0, 140),
+      excerptEn: excerptEn || contentEn.slice(0, 140),
       content,
+      contentEn,
       images,
     },
   });
@@ -159,7 +175,9 @@ export async function uploadImage(
       access: "public",
     });
     return { url: blob.url };
-  } catch {
-    return { error: "Не удалось загрузить фото. Попробуйте ещё раз." };
+  } catch (err) {
+    console.error("Blob upload failed:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    return { error: `Ошибка загрузки: ${message}` };
   }
 }

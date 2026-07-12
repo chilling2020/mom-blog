@@ -25,9 +25,13 @@ export default async function EditPostPage({
           <PostForm
             initialValues={{
               title: post.title,
+              titleEn: post.titleEn,
               category: post.category,
+              categoryEn: post.categoryEn,
               excerpt: post.excerpt,
+              excerptEn: post.excerptEn,
               content: post.content,
+              contentEn: post.contentEn,
               images: post.images,
             }}
             action={updatePost.bind(null, post.id)}

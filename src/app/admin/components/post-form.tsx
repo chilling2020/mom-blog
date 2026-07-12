@@ -6,9 +6,13 @@ import { uploadImage } from "../actions";
 
 type PostFormValues = {
   title: string;
+  titleEn: string;
   category: string;
+  categoryEn: string;
   excerpt: string;
+  excerptEn: string;
   content: string;
+  contentEn: string;
   images: string[];
 };
 
@@ -70,54 +74,108 @@ export default function PostForm({
         </p>
       )}
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700">
-          Заголовок
-        </label>
-        <input
-          name="title"
-          defaultValue={initialValues?.title}
-          required
-          className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Заголовок (русский)
+          </label>
+          <input
+            name="title"
+            defaultValue={initialValues?.title}
+            required
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Title (English)
+          </label>
+          <input
+            name="titleEn"
+            defaultValue={initialValues?.titleEn}
+            placeholder="Optional — leave empty to fall back to Russian"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700">
-          Категория
-        </label>
-        <input
-          name="category"
-          defaultValue={initialValues?.category}
-          placeholder="Например: Жизнь в США"
-          className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Категория (русский)
+          </label>
+          <input
+            name="category"
+            defaultValue={initialValues?.category}
+            placeholder="Например: Жизнь в США"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Category (English)
+          </label>
+          <input
+            name="categoryEn"
+            defaultValue={initialValues?.categoryEn}
+            placeholder="e.g. Life in the US"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700">
-          Краткое описание
-        </label>
-        <textarea
-          name="excerpt"
-          defaultValue={initialValues?.excerpt}
-          rows={2}
-          placeholder="Если оставить пустым — возьмётся начало текста статьи"
-          className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Краткое описание (русский)
+          </label>
+          <textarea
+            name="excerpt"
+            defaultValue={initialValues?.excerpt}
+            rows={2}
+            placeholder="Если оставить пустым — возьмётся начало текста статьи"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Excerpt (English)
+          </label>
+          <textarea
+            name="excerptEn"
+            defaultValue={initialValues?.excerptEn}
+            rows={2}
+            placeholder="Optional"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700">
-          Текст статьи
-        </label>
-        <textarea
-          name="content"
-          defaultValue={initialValues?.content}
-          required
-          rows={10}
-          className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Текст статьи (русский)
+          </label>
+          <textarea
+            name="content"
+            defaultValue={initialValues?.content}
+            required
+            rows={10}
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-700">
+            Article text (English)
+          </label>
+          <textarea
+            name="contentEn"
+            defaultValue={initialValues?.contentEn}
+            rows={10}
+            placeholder="Optional — leave empty to show the Russian text to English visitors"
+            className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
+          />
+        </div>
       </div>
 
       <div>
