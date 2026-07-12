@@ -93,7 +93,7 @@ export default function PostForm({
           <input
             name="titleEn"
             defaultValue={initialValues?.titleEn}
-            placeholder="Optional — leave empty to fall back to Russian"
+            placeholder="Auto-translated if left empty"
             className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
           />
         </div>
@@ -118,7 +118,7 @@ export default function PostForm({
           <input
             name="categoryEn"
             defaultValue={initialValues?.categoryEn}
-            placeholder="e.g. Life in the US"
+            placeholder="Auto-translated if left empty"
             className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
           />
         </div>
@@ -145,7 +145,7 @@ export default function PostForm({
             name="excerptEn"
             defaultValue={initialValues?.excerptEn}
             rows={2}
-            placeholder="Optional"
+            placeholder="Auto-translated if left empty"
             className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
           />
         </div>
@@ -172,7 +172,7 @@ export default function PostForm({
             name="contentEn"
             defaultValue={initialValues?.contentEn}
             rows={10}
-            placeholder="Optional — leave empty to show the Russian text to English visitors"
+            placeholder="Auto-translated if left empty"
             className="mt-1.5 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:border-neutral-950 focus:outline-none"
           />
         </div>

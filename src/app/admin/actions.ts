@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { put, del } from "@vercel/blob";
 import { prisma } from "@/lib/prisma";
+import { translateToEnglish } from "@/lib/translate";
 
 const COOKIE_NAME = "admin_session";
 
@@ -62,18 +63,30 @@ function makeSlug(title: string) {
 
 export async function createPost(formData: FormData): Promise<ActionState | void> {
   const title = formData.get("title")?.toString().trim() ?? "";
-  const titleEn = formData.get("titleEn")?.toString().trim() ?? "";
   const category = formData.get("category")?.toString().trim() ?? "";
-  const categoryEn = formData.get("categoryEn")?.toString().trim() ?? "";
   const excerpt = formData.get("excerpt")?.toString().trim() ?? "";
-  const excerptEn = formData.get("excerptEn")?.toString().trim() ?? "";
   const content = formData.get("content")?.toString().trim() ?? "";
-  const contentEn = formData.get("contentEn")?.toString().trim() ?? "";
   const images = formData.getAll("imageUrls").map(String).filter(Boolean);
 
   if (!title || !content) {
     return { error: "Заполните заголовок и текст статьи" };
   }
+
+  const finalCategory = category || "Без категории";
+  const finalExcerpt = excerpt || content.slice(0, 140);
+
+  // Auto-translate to English unless the person already typed a manual override.
+  const manualTitleEn = formData.get("titleEn")?.toString().trim();
+  const manualCategoryEn = formData.get("categoryEn")?.toString().trim();
+  const manualExcerptEn = formData.get("excerptEn")?.toString().trim();
+  const manualContentEn = formData.get("contentEn")?.toString().trim();
+
+  const [titleEn, categoryEn, excerptEn, contentEn] = await Promise.all([
+    manualTitleEn || translateToEnglish(title),
+    manualCategoryEn || translateToEnglish(finalCategory),
+    manualExcerptEn || translateToEnglish(finalExcerpt),
+    manualContentEn || translateToEnglish(content),
+  ]);
 
   let slug = makeSlug(title) || `post-${Date.now().toString(36)}`;
   const existing = await prisma.post.findUnique({ where: { slug } });
@@ -86,10 +99,10 @@ export async function createPost(formData: FormData): Promise<ActionState | void
       slug,
       title,
       titleEn,
-      category: category || "Без категории",
+      category: finalCategory,
       categoryEn,
-      excerpt: excerpt || content.slice(0, 140),
-      excerptEn: excerptEn || contentEn.slice(0, 140),
+      excerpt: finalExcerpt,
+      excerptEn,
       content,
       contentEn,
       images,
@@ -107,28 +120,39 @@ export async function updatePost(
   formData: FormData
 ): Promise<ActionState | void> {
   const title = formData.get("title")?.toString().trim() ?? "";
-  const titleEn = formData.get("titleEn")?.toString().trim() ?? "";
   const category = formData.get("category")?.toString().trim() ?? "";
-  const categoryEn = formData.get("categoryEn")?.toString().trim() ?? "";
   const excerpt = formData.get("excerpt")?.toString().trim() ?? "";
-  const excerptEn = formData.get("excerptEn")?.toString().trim() ?? "";
   const content = formData.get("content")?.toString().trim() ?? "";
-  const contentEn = formData.get("contentEn")?.toString().trim() ?? "";
   const images = formData.getAll("imageUrls").map(String).filter(Boolean);
 
   if (!title || !content) {
     return { error: "Заполните заголовок и текст статьи" };
   }
 
+  const finalCategory = category || "Без категории";
+  const finalExcerpt = excerpt || content.slice(0, 140);
+
+  const manualTitleEn = formData.get("titleEn")?.toString().trim();
+  const manualCategoryEn = formData.get("categoryEn")?.toString().trim();
+  const manualExcerptEn = formData.get("excerptEn")?.toString().trim();
+  const manualContentEn = formData.get("contentEn")?.toString().trim();
+
+  const [titleEn, categoryEn, excerptEn, contentEn] = await Promise.all([
+    manualTitleEn || translateToEnglish(title),
+    manualCategoryEn || translateToEnglish(finalCategory),
+    manualExcerptEn || translateToEnglish(finalExcerpt),
+    manualContentEn || translateToEnglish(content),
+  ]);
+
   const post = await prisma.post.update({
     where: { id },
     data: {
       title,
       titleEn,
-      category: category || "Без категории",
+      category: finalCategory,
       categoryEn,
-      excerpt: excerpt || content.slice(0, 140),
-      excerptEn: excerptEn || contentEn.slice(0, 140),
+      excerpt: finalExcerpt,
+      excerptEn,
       content,
       contentEn,
       images,
